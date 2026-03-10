@@ -59,7 +59,8 @@ all_num_series = img_hsi_reshaped.shape[0]
 Y_train_all = img_hsi_reshaped.reshape(all_num_series, 1, -1)
 Y_train = img_hsi_reshaped[indices, :].reshape(num_series, 1, -1)
 labels_train_all = np.argmax(gt_reshaped, axis=1)
-labels_train = np.argmax(gt_reshaped[indices, :], axis=1)
+# labels_train = np.argmax(gt_reshaped[indices, :], axis=1)
+labels_train = gt_reshaped[indices, 0]
 print(Y_train.shape, labels_train.shape)
 
 # Then we process the data for motion code model and generate X-variable, which is needed for training.
@@ -68,14 +69,14 @@ X_train_all, Y_train_all, labels_train_all = process_data_for_motion_codes(Y_tra
 print(X_train.shape, Y_train.shape, labels_train.shape)
 print(X_train_all.shape, Y_train_all.shape, labels_train_all.shape)
 
-model = MotionCode(m=12, Q=1, latent_dim=2, sigma_y=0.1)
-
-print("X_train shape: ", X_train.shape)
-
+# model = MotionCode(m=12, Q=1, latent_dim=2, sigma_y=0.1)
+# 
+# print("X_train shape: ", X_train.shape)
+# 
 model_path = 'motion_code/saved_models/grss'
-
-# Then we train model on the given X_train, Y_train, label_train set and saved it to a file named test_model.
-model.fit(X_train, Y_train, labels_train, model_path)
+# 
+# # Then we train model on the given X_train, Y_train, label_train set and saved it to a file named test_model.
+# model.fit(X_train, Y_train, labels_train, model_path)
 
 
 
