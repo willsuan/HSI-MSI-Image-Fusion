@@ -23,7 +23,7 @@
 #SBATCH -n 1
 #SBATCH --gpus-per-node=1
 #SBATCH -t 04:00:00
-#SBATCH -A YOUR_ALLOCATION_HERE
+#SBATCH -A IRI23021
 
 set -e
 
@@ -128,23 +128,16 @@ if [ "$MODE" = "train" ]; then
 
     # ---- Model 1: PixelMLP ----
     echo "=========================================="
-    echo "Training Model 1/3: PixelMLP"
+    echo "Training Model 1/2: PixelMLP"
     echo "=========================================="
     python3 train.py --config configs/grss_pixel_mlp.yaml 2>&1 | tee results/grss_pixel_mlp.log
     echo ""
 
     # ---- Model 2: CASiameseUNet ----
     echo "=========================================="
-    echo "Training Model 2/3: CASiameseUNet"
+    echo "Training Model 2/2: CASiameseUNet"
     echo "=========================================="
     python3 train.py --config configs/grss_ca_siamese.yaml 2>&1 | tee results/grss_ca_siamese.log
-    echo ""
-
-    # ---- Model 3: CASiameseTransformer ----
-    echo "=========================================="
-    echo "Training Model 3/3: CASiameseTransformer"
-    echo "=========================================="
-    python3 train.py --config configs/grss_siamese_transformer.yaml 2>&1 | tee results/grss_siamese_transformer.log
     echo ""
 
     echo "=== All training complete ==="

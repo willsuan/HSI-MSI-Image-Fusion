@@ -27,8 +27,8 @@ dataset:
     conductivity: 0.6341031137853861
     window_size: 3
     split_ratio: 0.8
-    data_type: pixel
-  batch_size: 128
+    data_type: patch
+  batch_size: 16
 
 loss:
   name: focal

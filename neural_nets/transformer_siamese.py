@@ -300,7 +300,6 @@ class CustomTransformerDecoderWithFourier(nn.Module):
         decoder_output = decoder_output.permute(1, 0, 2).contiguous()
         decoder_output = decoder_output.view(b, h, w, -1)
         decoder_output = decoder_output.permute(0, 3, 1, 2)  # (b, d, h, w)
-        pdb.set_trace()
         # Apply final linear layer to match number of classes
         output = self.linear(decoder_output)
         return output
@@ -347,7 +346,7 @@ class CASiameseTransformer(nn.Module):
         self.attention = AttentionBlock(latent_dim)
         self.cross_attention = CrossAttentionBlock(
             hsi_channels=latent_dim, msi_channels=latent_dim, out_channels=latent_dim)
-        self.decoder = CustomTransformerDecoderWithFourier(latent_dim,
+        self.decoder = CustomTransformerDecoderWithFourier(latent_dim * 2,
                                                            num_classes=output_channels,
                                                            patch_size=16,
                                                            input_size=16)
