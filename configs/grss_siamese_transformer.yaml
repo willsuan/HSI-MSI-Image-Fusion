@@ -1,0 +1,36 @@
+experiment:
+  name: 'grss_siamese_transformer'
+
+device: 0
+num_epochs: 40
+
+model:
+ name: siamese_transformer
+ kwargs:
+  hsi_in: 12
+  msi_in: 3
+  latent_dim: 256
+  output_channels: 20
+
+dataset:
+  name: grss
+  kwargs:
+    data_dir: './data/GRSS'
+    rgb_width: 64
+    rgb_height: 64
+    hsi_width: 32
+    hsi_height: 32
+    top_k: 12
+    channels:
+    gamma: 0.4
+    contrast_enhance: True
+    conductivity: 0.6341031137853861
+    window_size: 3
+    split_ratio: 0.8
+    data_type: pixel
+  batch_size: 128
+
+loss:
+  name: focal
+  kwargs:
+    gamma: 3.0
