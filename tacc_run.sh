@@ -18,10 +18,9 @@
 #SBATCH -J grss_train
 #SBATCH -o grss_train_%j.out
 #SBATCH -e grss_train_%j.err
-#SBATCH -p gpu-a100
+#SBATCH -p gh
 #SBATCH -N 1
 #SBATCH -n 1
-#SBATCH --gpus-per-node=1
 #SBATCH -t 04:00:00
 #SBATCH -A IRI23021
 
