@@ -63,7 +63,7 @@ if [ "$MODE" = "setup" ]; then
     pip install --upgrade pip
     pip install torch torchvision
     pip install matplotlib scipy scikit-learn einops tqdm torchmetrics spectral \
-                rasterio tensorboard ConfigSpace albumentations tifffile pyyaml pandas imgaug
+                tensorboard ConfigSpace albumentations tifffile pyyaml pandas imgaug
 
     # Organize data
     echo "=== Organizing GRSS data ==="
