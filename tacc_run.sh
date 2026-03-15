@@ -56,17 +56,20 @@ if [ "$MODE" = "setup" ]; then
     echo "=== Organizing GRSS data ==="
     mkdir -p data/GRSS
 
-    if [ -f "phase2.zip" ]; then
-        echo "Extracting phase2.zip..."
-        unzip -o phase2.zip -d data/GRSS/
+    # Find any GRSS zip file (phase2.zip or 2018IEEEGRSS_DataFusionChallenge.fixed.zip)
+    ZIP_FILE=$(ls phase2.zip 2018IEEEGRSS*.zip 2>/dev/null | head -1)
+
+    if [ -n "$ZIP_FILE" ]; then
+        echo "Extracting $ZIP_FILE..."
+        unzip -o "$ZIP_FILE" -d data/GRSS/
         echo "Data extracted to data/GRSS/"
     elif [ -d "data/GRSS/ImageryAndTrainingGT" ]; then
         echo "Data already organized."
     else
         echo ""
-        echo "ERROR: phase2.zip not found and data/GRSS/ImageryAndTrainingGT doesn't exist."
-        echo "Download the data from: http://hyperspectral.ee.uh.edu/QZ23es1aMPH/2018IEEE/phase2.zip"
-        echo "Place phase2.zip in this directory and re-run: bash tacc_run.sh setup"
+        echo "ERROR: No GRSS zip found and data/GRSS/ImageryAndTrainingGT doesn't exist."
+        echo "Download from: https://utexas.app.box.com/s/32clotuwcsmeutqooe4k48xet4m4ziso"
+        echo "Place the zip in this directory and re-run: bash tacc_run.sh setup"
         exit 1
     fi
 
