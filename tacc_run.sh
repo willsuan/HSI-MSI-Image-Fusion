@@ -38,19 +38,32 @@ MODE="${1:-help}"
 if [ "$MODE" = "setup" ]; then
     echo "=== Setting up environment ==="
 
-    # Create conda env if it doesn't exist
-    if ! conda info --envs | grep -q "grss"; then
-        echo "Creating conda environment 'grss'..."
-        conda create -n grss python=3.10 -y
+    # Load TACC modules
+    module load cuda/12.4 2>/dev/null || module load cuda/11.8 2>/dev/null || true
+    module load python3/3.11 2>/dev/null || module load python3 2>/dev/null || true
+    module load conda 2>/dev/null || true
+
+    # Try conda first, fall back to venv
+    if command -v conda &>/dev/null; then
+        if ! conda info --envs 2>/dev/null | grep -q "grss"; then
+            echo "Creating conda environment 'grss'..."
+            conda create -n grss python=3.10 -y
+        fi
+        eval "$(conda shell.bash hook)"
+        conda activate grss
+    else
+        echo "conda not found, using python venv..."
+        if [ ! -d "venv" ]; then
+            python3 -m venv venv
+        fi
+        source venv/bin/activate
     fi
 
-    eval "$(conda shell.bash hook)"
-    conda activate grss
-
     echo "Installing dependencies..."
-    pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+    pip install --upgrade pip
+    pip install torch torchvision
     pip install matplotlib scipy scikit-learn einops tqdm torchmetrics spectral \
-                rasterio tensorboard ConfigSpace albumentations tifffile pyyaml pandas
+                rasterio tensorboard ConfigSpace albumentations tifffile pyyaml pandas imgaug
 
     # Organize data
     echo "=== Organizing GRSS data ==="
@@ -123,9 +136,15 @@ if [ "$MODE" = "train" ]; then
     echo ""
 
     # Activate environment
-    module load cuda/11.8 2>/dev/null || true
-    eval "$(conda shell.bash hook)" 2>/dev/null || true
-    conda activate grss 2>/dev/null || true
+    module load cuda/12.4 2>/dev/null || module load cuda/11.8 2>/dev/null || true
+    module load python3/3.11 2>/dev/null || module load python3 2>/dev/null || true
+    module load conda 2>/dev/null || true
+    if command -v conda &>/dev/null; then
+        eval "$(conda shell.bash hook)" 2>/dev/null || true
+        conda activate grss 2>/dev/null || true
+    elif [ -d "venv" ]; then
+        source venv/bin/activate
+    fi
 
     mkdir -p models results
 
